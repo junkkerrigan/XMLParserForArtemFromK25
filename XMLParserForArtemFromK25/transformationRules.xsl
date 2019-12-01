@@ -5,7 +5,7 @@
 
 <BODY>
 
-<H2>Список дисків</H2> 
+<H2>Книги</H2> 
 
 <TABLE BORDER="2">
 
@@ -15,31 +15,25 @@
 
 <TH>
 
-<b>Назва композиції</b>
+<b>Назва</b>
 
 </TH>
 
 <TH>
 
-<b>Виконавець</b>
+<b>Автор</b>
 
 </TH>
 
 <TH>
 
-<b>Країна</b>
+<b>Опис</b>
 
 </TH>
 
 <TH>
 
-<b>Компанія-продюсер</b>
-
-</TH>
-
-<TH>
-
-<b>Ціна</b>
+<b>Жанр</b>
 
 </TH>
 
@@ -49,13 +43,19 @@
 
 </TH>
 
+<TH>
+
+<b>Ціна</b>
+
+</TH>
+
 </TR>
 
 </THEAD>
 
 <TBODY>
 
-<xsl:for-each select="/*/cd">
+<xsl:for-each select="/*/book">
 
 <TR>
 
@@ -67,31 +67,31 @@
 
 <TD>
 
-<b><xsl:value-of select="./artist" /></b>
+<b><xsl:value-of select="./author" /></b>
 
 </TD>
 
 <TD>
 
-<b><xsl:value-of select="./country" /></b>
+<b><xsl:value-of select="./description" /></b>
 
 </TD>
 
 <TD>
 
-<b><xsl:value-of select="./company" /></b>
+<b><xsl:value-of select="./genre" /></b>
+
+</TD>
+
+<TD>
+
+<b><xsl:value-of select="./publishYear" /></b>
 
 </TD>
 
 <TD>
 
 <b><xsl:value-of select="./price" /></b>
-
-</TD>
-
-<TD>
-
-<b><xsl:value-of select="./year" /></b>
 
 
 </TD>

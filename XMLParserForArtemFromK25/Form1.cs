@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -23,34 +24,34 @@ namespace XMLParsing
         public static int SAX { get; set; } = 2;
     }
 
-    public class CDInfo 
+    public class BookInfo 
     {
+        public string Author { get; set; }
         public string Title { get; set; }
-        public string Artist { get; set; }
-        public string Country { get; set; }
-        public string Company { get; set; }
+        public string Description { get; set; }
+        public string Genre { get; set; }
         public string Price { get; set; }
         public string Year { get; set; }
 
         public string InfoToDisplay(int cnt)
         {
             return
-                $"CD #{cnt}\n" +
+                $"Book No.{cnt}\n" +
+                $"Author: {Author}\n" +
                 $"Title: {Title}\n" +
-                $"Artist: {Artist}\n" +
-                $"Country: {Country}\n" +
-                $"Company: {Company}\n" +
+                $"Description: {Description}\n" +
+                $"Genre: {Genre}\n" +
                 $"Price: {Price}\n" +
                 $"Year: {Year}\n";
         }
     }
 
-    public class CDFilter 
+    public class BookFilter 
     {
         public string Title { get; set; } = string.Empty;
-        public string Artist { get; set; } = string.Empty;
-        public string Company { get; set; } = string.Empty;
-        public string Country { get; set; } = string.Empty;
+        public string Author { get; set; } = string.Empty;
+        public string Genre { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public float PriceFrom { get; set; } = float.MinValue;
         public float PriceTo { get; set; } = float.MaxValue;
         public float YearFrom { get; set; } = float.MinValue;
@@ -144,13 +145,13 @@ namespace XMLParsing
             }
         }
 
-        public bool IsMatch(CDInfo candidate)
+        public bool IsMatch(BookInfo candidate)
         {
             return (
-                candidate.Title.ToLower().Contains(Title)
-                && candidate.Artist.ToLower().Contains(Artist)
-                && candidate.Company.ToLower().Contains(Company)
-                && candidate.Country.ToLower().Contains(Country)
+                candidate.Author.ToLower().Contains(Author)
+                && candidate.Title.ToLower().Contains(Title)
+                && candidate.Genre.ToLower().Contains(Genre)
+                && candidate.Description.ToLower().Contains(Description)
                 && (Convert.ToSingle(candidate.Price, nfi) >= PriceFrom)
                 && (Convert.ToSingle(candidate.Price, nfi) <= PriceTo)
                 && (Convert.ToSingle(candidate.Year, nfi) >= YearFrom)
@@ -161,23 +162,22 @@ namespace XMLParsing
 
     public class ResultData
     {
-        public string CDData { get; set; } = string.Empty;
+        public string BookData { get; set; } = string.Empty;
+        public string[] Authors { get; set; }
         public string[] Titles { get; set; }
-        public string[] Artists { get; set; }
-        public string[] Countries { get; set; }
-        public string[] Companies { get; set; }
+        public string[] Genres { get; set; }
     }
 
     public interface XMLParser
     {
-        ResultData FilterBy(CDFilter filter);
+        ResultData FilterBy(BookFilter filter);
 
         void Load(string file);
     }
 
     public class LINQParser : XMLParser
     {
-        List<CDInfo> CDs;
+        List<BookInfo> Books;
 
         public LINQParser(string file)
         {
@@ -187,25 +187,25 @@ namespace XMLParsing
         public void Load(string file)
         {
             XDocument XMLData = XDocument.Load(file);
-            CDs = new List<CDInfo>(
-                from cd in XMLData.Element("catalog").Elements("cd")
-                select new CDInfo()
+            Books = new List<BookInfo>(
+                from book in XMLData.Element("catalog").Elements("book")
+                select new BookInfo()
                 {
-                    Title = cd.Element("title").Value,
-                    Artist = cd.Element("artist").Value,
-                    Company = cd.Element("company").Value,
-                    Country = cd.Element("country").Value,
-                    Price = cd.Element("price").Value,
-                    Year = cd.Element("year").Value,
+                    Title = book.Element("title").Value,
+                    Author = book.Element("author").Value,
+                    Genre = book.Element("genre").Value,
+                    Description = book.Element("description").Value,
+                    Price = book.Element("price").Value,
+                    Year = book.Element("publishYear").Value,
                 });
         }
 
-        public ResultData FilterBy(CDFilter filter)
+        public ResultData FilterBy(BookFilter filter)
         {
-            List<CDInfo> match = new List<CDInfo>(
-                from cd in CDs
-                where filter.IsMatch(cd)
-                select cd);
+            List<BookInfo> match = new List<BookInfo>(
+                from book in Books
+                where filter.IsMatch(book)
+                select book);
             string dataToDisplay = "";
             for (int i = 0; i < match.Count(); i++)
             {
@@ -214,18 +214,15 @@ namespace XMLParsing
 
             return new ResultData()
             {
-                CDData = dataToDisplay,
-                Titles = (from cd in match
-                    select cd.Title)
+                BookData = dataToDisplay,
+                Titles = (from book in match
+                    select book.Title)
                     .Distinct().ToArray(),
-                Artists = (from cd in match
-                    select cd.Artist)
+                Authors = (from book in match
+                    select book.Author)
                     .Distinct().ToArray(),
-                Countries = (from cd in match
-                    select cd.Country)
-                    .Distinct().ToArray(),
-                Companies = (from cd in match
-                    select cd.Company)
+                Genres = (from book in match
+                    select book.Genre)
                     .Distinct().ToArray(),
             };
         }
@@ -240,45 +237,42 @@ namespace XMLParsing
             Load(file);
         }
 
-        public ResultData FilterBy(CDFilter filter)
+        public ResultData FilterBy(BookFilter filter)
         {
-            var cdNodes = xmlDoc.SelectNodes("//cd");
+            var bookNodes = xmlDoc.SelectNodes("//book");
             
             var dataToDisplay = "";
             List<string> titles = new List<string>();
-            List<string> artists = new List<string>();
-            List<string> companies = new List<string>();
-            List<string> countries = new List<string>();
+            List<string> authors = new List<string>();
+            List<string> genres = new List<string>();
             int i = 0;
-            foreach (XmlNode node in cdNodes)
+            foreach (XmlNode node in bookNodes)
             {
-                CDInfo cd = new CDInfo()
+                BookInfo book = new BookInfo()
                 {
                     Title = node.SelectSingleNode("title").InnerText,
-                    Artist = node.SelectSingleNode("artist").InnerText,
-                    Company = node.SelectSingleNode("company").InnerText,
-                    Country = node.SelectSingleNode("country").InnerText,
+                    Author = node.SelectSingleNode("author").InnerText,
+                    Genre = node.SelectSingleNode("genre").InnerText,
+                    Description = node.SelectSingleNode("description").InnerText,
                     Price = node.SelectSingleNode("price").InnerText,
-                    Year = node.SelectSingleNode("year").InnerText,
+                    Year = node.SelectSingleNode("publishYear").InnerText,
                 };
-                if (filter.IsMatch(cd))
+                if (filter.IsMatch(book))
                 {
                     i++;
-                    dataToDisplay += cd.InfoToDisplay(i) + '\n';
-                    titles.Add(cd.Title);
-                    artists.Add(cd.Artist);
-                    companies.Add(cd.Company);
-                    countries.Add(cd.Country);
+                    dataToDisplay += book.InfoToDisplay(i) + '\n';
+                    titles.Add(book.Title);
+                    authors.Add(book.Author);
+                    genres.Add(book.Genre);
                 }
             }
 
             return new ResultData()
             {
-                CDData = dataToDisplay,
+                BookData = dataToDisplay,
                 Titles = titles.Distinct().ToArray(),
-                Artists = artists.Distinct().ToArray(),
-                Companies = companies.Distinct().ToArray(),
-                Countries = countries.Distinct().ToArray(),
+                Authors = authors.Distinct().ToArray(),
+                Genres = genres.Distinct().ToArray(),
             };
         }
 
@@ -297,15 +291,14 @@ namespace XMLParsing
             Load(file);
         }       
 
-        public ResultData FilterBy(CDFilter filter)
+        public ResultData FilterBy(BookFilter filter)
         {
-            CDInfo cd = null;
+            BookInfo book = null;
             int i = 0;
             var dataToDisplay = "";
             List<string> titles = new List<string>();
-            List<string> artists = new List<string>();
-            List<string> companies = new List<string>();
-            List<string> countries = new List<string>();
+            List<string> authors = new List<string>();
+            List<string> genres = new List<string>();
 
             while (xmlReader.Read())
             {
@@ -314,42 +307,38 @@ namespace XMLParsing
                     case XmlNodeType.Element:
                         switch(xmlReader.Name)
                         {
-                            case "cd":
-                                cd = new CDInfo();
+                            case "book":
+                                book = new BookInfo();
                                 break;
                             case "title":
-                                cd.Title = xmlReader.Value;
+                                book.Title = xmlReader.Value;
                                 titles.Add(xmlReader.Value);
                                 break;
-                            case "artist":
-                                cd.Artist = xmlReader.Value;
-                                artists.Add(xmlReader.Value);
+                            case "author":
+                                book.Author = xmlReader.Value;
+                                authors.Add(xmlReader.Value);
                                 break;
-                            case "company":
-                                cd.Company = xmlReader.Value;
-                                companies.Add(xmlReader.Value);
-                                break;
-                            case "country":
-                                cd.Country = xmlReader.Value;
-                                countries.Add(xmlReader.Value);
+                            case "genre":
+                                book.Genre = xmlReader.Value;
+                                genres.Add(xmlReader.Value);
                                 break;
                             case "price":
-                                cd.Price = xmlReader.Value;
+                                book.Price = xmlReader.Value;
                                 break;
-                            case "year":
-                                cd.Year = xmlReader.Value;
+                            case "publishYear":
+                                book.Year = xmlReader.Value;
                                 break;
                             default:
                                 break;
                         }
                         break;
                     case XmlNodeType.EndElement:
-                        if (xmlReader.Name == "cd")
+                        if (xmlReader.Name == "book")
                         {
-                            if (filter.IsMatch(cd))
+                            if (filter.IsMatch(book))
                             {
                                 i++;
-                                dataToDisplay += cd.InfoToDisplay(i) + '\n';
+                                dataToDisplay += book.InfoToDisplay(i) + '\n';
                             }
                         }
                         break;
@@ -360,11 +349,10 @@ namespace XMLParsing
 
             return new ResultData()
             {
-                CDData = dataToDisplay,
+                BookData = dataToDisplay,
+                Authors = authors.Distinct().ToArray(),
                 Titles = titles.Distinct().ToArray(),
-                Artists = artists.Distinct().ToArray(),
-                Companies = companies.Distinct().ToArray(),
-                Countries = countries.Distinct().ToArray(),
+                Genres = genres.Distinct().ToArray(),
             };
         }
 
@@ -378,8 +366,8 @@ namespace XMLParsing
     {
         // GUI elements
         RichTextBox ContentContainer;
-        ComboBox AuthorFilter, TitleFilter, DescriptionFilter, GenreFilter;
-        TextBox PriceFromFilter, PriceToFilter, YearFromFilter, YearToFilter;
+        ComboBox AuthorFilter, TitleFilter, GenreFilter;
+        TextBox DescriptionFilter, PriceFromFilter, PriceToFilter, YearFromFilter, YearToFilter;
         RadioButton LINQ, DOM, SAX;
         Button Search, Reload, Reset, Transform;
         Label L1, L2, L3, L4, L5, L6, L7, L8;
@@ -390,7 +378,7 @@ namespace XMLParsing
         string HTMLTargetFile = "../../../transformed.html";
 
         // logic elements
-        CDFilter CurrentFilter = new CDFilter(); // stores filters values
+        BookFilter CurrentFilter = new BookFilter(); // stores filters values
         XMLParser Parser;
 
         public MainForm()
@@ -432,16 +420,16 @@ namespace XMLParsing
                 AuthorFilter.Bounds.Bottom + 20),
                 Size = new Size(ContentContainer.Width - 130, 100),
                 Font = new Font("Verdana", 12),
-                Name = "Artist",
+                Name = "Title",
             };
 
-            DescriptionFilter = new ComboBox
+            DescriptionFilter = new TextBox
             {
                 Location = new Point(190 + ContentContainer.Width,
                 TitleFilter.Bounds.Bottom + 20),
                 Size = new Size(ContentContainer.Width - 130, 100),
                 Font = new Font("Verdana", 12),
-                Name = "Country",
+                Name = "Description",
             };
 
             GenreFilter = new ComboBox
@@ -450,7 +438,7 @@ namespace XMLParsing
                 DescriptionFilter.Bounds.Bottom + 20),
                 Size = new Size(ContentContainer.Width - 130, 100),
                 Font = new Font("Verdana", 12),
-                Name = "Company",
+                Name = "Genre",
             };
 
             YearFromFilter = new TextBox
@@ -762,24 +750,22 @@ namespace XMLParsing
         {
             var res = Parser.FilterBy(CurrentFilter);
             ContentContainer.Text = 
-                String.IsNullOrWhiteSpace(res.CDData)
+                String.IsNullOrWhiteSpace(res.BookData)
                 ? "Books not found :("
-                : res.CDData;
+                : res.BookData;
 
             AuthorFilter.Items.Clear();
             TitleFilter.Items.Clear();
-            DescriptionFilter.Items.Clear();
             GenreFilter.Items.Clear();
             
-            AuthorFilter.Items.AddRange(res.Titles.ToArray());
-            TitleFilter.Items.AddRange(res.Artists.ToArray());
-            DescriptionFilter.Items.AddRange(res.Countries.ToArray());
-            GenreFilter.Items.AddRange(res.Companies.ToArray());
+            AuthorFilter.Items.AddRange(res.Authors.ToArray());
+            TitleFilter.Items.AddRange(res.Titles.ToArray());
+            GenreFilter.Items.AddRange(res.Genres.ToArray());
         }
 
         private void ResetFilters()
         {
-            CurrentFilter = new CDFilter();
+            CurrentFilter = new BookFilter();
             AuthorFilter.Text = "";
             TitleFilter.Text = "";
             GenreFilter.Text = "";
