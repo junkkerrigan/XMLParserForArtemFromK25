@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLParserForArtemFromK25", "XMLParserForArtemFromK25\XMLParserForArtemFromK25.csproj", "{2A5A01DE-0990-462E-98B3-8E8967009920}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParseXml", "XMLParserForArtemFromK25\ParseXml.csproj", "{2A5A01DE-0990-462E-98B3-8E8967009920}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

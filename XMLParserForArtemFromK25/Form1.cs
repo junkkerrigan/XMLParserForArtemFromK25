@@ -378,43 +378,20 @@ namespace XMLParsing
     {
         // GUI elements
         RichTextBox ContentContainer;
-        ComboBox TitleFilter, ArtistFilter, CountryFilter, CompanyFilter;
-        TextBox PriceFilterFrom, PriceFilterTo, YearFilterFrom, YearFilterTo;
+        ComboBox AuthorFilter, TitleFilter, DescriptionFilter, GenreFilter;
+        TextBox PriceFromFilter, PriceToFilter, YearFromFilter, YearToFilter;
         RadioButton LINQ, DOM, SAX;
         Button Search, Reload, Reset, Transform;
+        Label L1, L2, L3, L4, L5, L6, L7, L8;
 
         // hardcoded paths
-        string XMLSourceFile = "../../data.xml";
-        string XSLTSourceFile = "../../transformationRules.xsl";
-        string HTMLTargetFile = "../../transformed.html";
+        string XMLSourceFile = "../../../data.xml";
+        string XSLTSourceFile = "../../../transformationRules.xsl";
+        string HTMLTargetFile = "../../../transformed.html";
 
         // logic elements
         CDFilter CurrentFilter = new CDFilter(); // stores filters values
         XMLParser Parser;
-
-        Dictionary<string, bool> FirstTime = new Dictionary<string, bool>()
-        {
-            { "Title", true },
-            { "Artist", true },
-            { "Company", true },
-            { "Country", true },
-            { "PriceFrom", true },
-            { "PriceTo", true },
-            { "YearFrom", true },
-            { "YearTo", true },
-        };
-
-        Dictionary<string, string> DefaultValues = new Dictionary<string, string>()
-        {
-            { "Title", "Title" },
-            { "Artist", "Artist" },
-            { "Company", "Company" },
-            { "Country", "Country" },
-            { "PriceFrom", "Price: from" },
-            { "PriceTo", "Price: to" },
-            { "YearFrom", "Year: from" },
-            { "YearTo", "Year: to" },
-        };
 
         public MainForm()
         {
@@ -422,13 +399,14 @@ namespace XMLParsing
 
             ContentContainer = new RichTextBox
             {
-                Location = new Point(30, 30),
-                Size = new Size((Width - 120) / 2, ClientSize.Height - 70)
+                Location = new Point(30, 60),
+                Size = new Size((Width - 120) / 2, ClientSize.Height - 80)
             };
             Controls.Add(ContentContainer);
             InitializeFilters();
-            InitializeRadioButtons();
+            InitializeLabels();
             InitializeControlButtons();
+            InitializeRadioButtons();
 
             SizeChanged += XMLDataVisualizator_SizeChanged;
             FormClosing += XMLDataVisualizator_Closing;
@@ -438,148 +416,130 @@ namespace XMLParsing
         }
 
         // GUI elements initializers
-        void InitializeFilters()
+        private void InitializeFilters()
         {
-            TitleFilter = new ComboBox
+            AuthorFilter = new ComboBox
             {
-                Location = new Point(90 + ContentContainer.Width, 30),
-                Size = new Size(ContentContainer.Width - 30, 100),
-                Font = new Font("Verdana", 16),
-                Text = DefaultValues["Title"],
-                Name = "Title",
+                Location = new Point(190 + ContentContainer.Width, 40),
+                Size = new Size(ContentContainer.Width - 130, 100),
+                Font = new Font("Verdana", 12),
+                Name = "Author",
             };
 
-            ArtistFilter = new ComboBox
+            TitleFilter = new ComboBox
             {
-                Location = new Point(90 + ContentContainer.Width,
-                TitleFilter.Bounds.Bottom + 30),
-                Size = new Size(ContentContainer.Width - 30, 100),
-                Font = new Font("Verdana", 16),
-                Text = DefaultValues["Artist"],
+                Location = new Point(190 + ContentContainer.Width,
+                AuthorFilter.Bounds.Bottom + 20),
+                Size = new Size(ContentContainer.Width - 130, 100),
+                Font = new Font("Verdana", 12),
                 Name = "Artist",
             };
 
-            CountryFilter = new ComboBox
+            DescriptionFilter = new ComboBox
             {
-                Location = new Point(90 + ContentContainer.Width,
-                ArtistFilter.Bounds.Bottom + 30),
-                Size = new Size(ContentContainer.Width - 30, 100),
-                Font = new Font("Verdana", 16),
-                Text = DefaultValues["Country"],
+                Location = new Point(190 + ContentContainer.Width,
+                TitleFilter.Bounds.Bottom + 20),
+                Size = new Size(ContentContainer.Width - 130, 100),
+                Font = new Font("Verdana", 12),
                 Name = "Country",
             };
 
-            CompanyFilter = new ComboBox
+            GenreFilter = new ComboBox
             {
-                Location = new Point(90 + ContentContainer.Width,
-                CountryFilter.Bounds.Bottom + 30),
-                Size = new Size(ContentContainer.Width - 30, 100),
-                Font = new Font("Verdana", 16),
-                Text = DefaultValues["Company"],
+                Location = new Point(190 + ContentContainer.Width,
+                DescriptionFilter.Bounds.Bottom + 20),
+                Size = new Size(ContentContainer.Width - 130, 100),
+                Font = new Font("Verdana", 12),
                 Name = "Company",
             };
 
-            PriceFilterFrom = new TextBox
+            YearFromFilter = new TextBox
             {
-                Location = new Point(90 + ContentContainer.Width,
-                CompanyFilter.Bounds.Bottom + 30),
-                Size = new Size((ContentContainer.Width - 70) / 2, 100),
-                Font = new Font("Verdana", 14),
-                Text = DefaultValues["PriceFrom"],
-                Name = "PriceFrom",
-            };
-
-            PriceFilterTo = new TextBox
-            {
-                Location = new Point((190 + 3 * ContentContainer.Width) / 2,
-                CompanyFilter.Bounds.Bottom + 30),
-                Size = new Size((ContentContainer.Width - 70) / 2, 100),
-                Font = new Font("Verdana", 14),
-                Text = DefaultValues["PriceTo"],
-                Name  = "PriceTo",
-            };
-
-            YearFilterFrom = new TextBox
-            {
-                Location = new Point(90 + ContentContainer.Width,
-                PriceFilterTo.Bounds.Bottom + 20),
-                Size = new Size((ContentContainer.Width - 70) / 2, 100),
-                Font = new Font("Verdana", 14),
-                Text = DefaultValues["YearFrom"],
+                Location = new Point(190 + ContentContainer.Width,
+                GenreFilter.Bounds.Bottom + 20),
+                Size = new Size((AuthorFilter.Width - 30) / 2, 100),
+                Font = new Font("Verdana", 10),
                 Name = "YearFrom",
             };
 
-            YearFilterTo = new TextBox
+            YearToFilter = new TextBox
             {
-                Location = new Point((190 + 3 * ContentContainer.Width) / 2,
-                PriceFilterTo.Bounds.Bottom + 20),
-                Size = new Size((ContentContainer.Width - 70) / 2, 100),
-                Font = new Font("Verdana", 14),
-                Text = DefaultValues["YearTo"],
+                Location =
+                new Point(YearFromFilter.Right + 30,
+                GenreFilter.Bounds.Bottom + 20),
+                Size = new Size((AuthorFilter.Width - 30) / 2, 100),
+                Font = new Font("Verdana", 10),
                 Name = "YearTo",
             };
+
+            PriceFromFilter = new TextBox
+            {
+                Location =
+                new Point(190 + ContentContainer.Width,
+                YearFromFilter.Bounds.Bottom + 20),
+                Size = new Size((AuthorFilter.Width - 30) / 2, 100),
+                Font = new Font("Verdana", 10),
+                Name = "PriceFrom",
+            };
+
+            PriceToFilter = new TextBox
+            {
+                Location = new Point(YearFromFilter.Right + 30,
+                YearFromFilter.Bounds.Bottom + 20),
+                Size = new Size((AuthorFilter.Width - 30) / 2, 100),
+                Font = new Font("Verdana", 10),
+                Name  = "PriceTo",
+            };
             
-            TitleFilter.TextChanged += Filter_TextChanged;
-            CompanyFilter.TextChanged += Filter_TextChanged;
-            CountryFilter.TextChanged += Filter_TextChanged;
-            ArtistFilter.TextChanged += Filter_TextChanged;
-            YearFilterTo.TextChanged += Filter_TextChanged;
-            YearFilterFrom.TextChanged += Filter_TextChanged;
-            PriceFilterFrom.TextChanged += Filter_TextChanged;
-            PriceFilterTo.TextChanged += Filter_TextChanged;
+            AuthorFilter.TextChanged += FilterChanged;
+            GenreFilter.TextChanged += FilterChanged;
+            DescriptionFilter.TextChanged += FilterChanged;
+            TitleFilter.TextChanged += FilterChanged;
+            YearToFilter.TextChanged += FilterChanged;
+            YearFromFilter.TextChanged += FilterChanged;
+            PriceFromFilter.TextChanged += FilterChanged;
+            PriceToFilter.TextChanged += FilterChanged;
 
-            TitleFilter.Enter += Filter_Enter;
-            CompanyFilter.Enter += Filter_Enter;
-            CountryFilter.Enter += Filter_Enter;
-            ArtistFilter.Enter += Filter_Enter;
-            YearFilterTo.Enter += Filter_Enter;
-            YearFilterFrom.Enter += Filter_Enter;
-            PriceFilterFrom.Enter += Filter_Enter;
-            PriceFilterTo.Enter += Filter_Enter;
-
-            TitleFilter.Leave += Filter_Leave;
-            CompanyFilter.Leave += Filter_Leave;
-            CountryFilter.Leave += Filter_Leave;
-            ArtistFilter.Leave += Filter_Leave;
-            YearFilterTo.Leave += Filter_Leave;
-            YearFilterFrom.Leave += Filter_Leave;
-            PriceFilterFrom.Leave += Filter_Leave;
-            PriceFilterTo.Leave += Filter_Leave;
-
+            Controls.Add(AuthorFilter);
             Controls.Add(TitleFilter);
-            Controls.Add(ArtistFilter);
-            Controls.Add(CountryFilter);
-            Controls.Add(CompanyFilter);
-            Controls.Add(PriceFilterFrom);
-            Controls.Add(PriceFilterTo);
-            Controls.Add(YearFilterFrom);
-            Controls.Add(YearFilterTo);
+            Controls.Add(DescriptionFilter);
+            Controls.Add(GenreFilter);
+            Controls.Add(PriceFromFilter);
+            Controls.Add(PriceToFilter);
+            Controls.Add(YearFromFilter);
+            Controls.Add(YearToFilter);
         }
 
-        void InitializeRadioButtons()
+        private void InitializeRadioButtons()
         {
-            LINQ = new RadioButton()
-            {
-                Text = "LINQ",
-                Name = "LINQ",
-                Checked = true,
-                Font = new Font("Verdana", 12),
-                Location = new Point(YearFilterFrom.Bounds.X, YearFilterFrom.Bounds.Bottom + 21),
-            };
-            DOM = new RadioButton()
-            {
-                Text = "DOM",
-                Name = "DOM",
-                Font = new Font("Verdana", 12),
-                Location = new Point(LINQ.Bounds.Right, LINQ.Bounds.Y),
-            };
             SAX = new RadioButton()
             {
                 Text = "SAX",
                 Name = "SAX",
                 Font = new Font("Verdana", 12),
-                Location = new Point(DOM.Bounds.Right, DOM.Bounds.Y),
+                Height = 30,
+                Location = new Point(Search.Left + 10, Search.Bottom + 15),
             };
+            DOM = new RadioButton()
+            {
+                Text = "DOM",
+                Name = "DOM",
+                Height = 30,
+
+                Font = new Font("Verdana", 12),
+                Location = new Point(SAX.Right, SAX.Top),
+            };
+            LINQ = new RadioButton()
+            {
+                Text = "LINQ",
+                Name = "LINQ",
+                Checked = true,
+                Height = 30,
+
+                Font = new Font("Verdana", 12),
+                Location = new Point(DOM.Right, SAX.Top),
+            };
+            
 
             LINQ.CheckedChanged += RadioButton_CheckedChanged;
             DOM.CheckedChanged += RadioButton_CheckedChanged;
@@ -590,28 +550,28 @@ namespace XMLParsing
             Controls.Add(SAX);
         }
 
-        void InitializeControlButtons()
+        private void InitializeControlButtons()
         {
             Search = new Button()
             {
                 Text = "Search",
-                Location = new Point(TitleFilter.Bounds.X, LINQ.Bounds.Bottom + 21),
+                Location = new Point(L1.Left + 20, PriceFromFilter.Bottom + 30),
                 Font = new Font("Verdana", 10),
-                Size = new Size(70, 30),
-            };
-            Reload = new Button()
-            {
-                Text = "Reload data",
-                Location = new Point(Search.Bounds.Right + 10, Search.Bounds.Y),
-                Font = new Font("Verdana", 10),
-                Size = new Size(115, 30),
+                Size = new Size(80, 40),
             };
             Reset = new Button()
             {
-                Text = "Reset filters",
-                Location = new Point(Reload.Bounds.Right + 10, Reload.Bounds.Y),
+                Text = "Reset",
+                Location = new Point(Search.Bounds.Right + 30, Search.Bounds.Y),
                 Font = new Font("Verdana", 10),
-                Size = new Size(115, 30),
+                Size = new Size(80, 40),
+            };
+            Reload = new Button()
+            {
+                Text = "Reload",
+                Location = new Point(Reset.Bounds.Right + 30, Reset.Bounds.Y),
+                Font = new Font("Verdana", 10),
+                Size = new Size(100, 40),
             };
 
             Search.Click += (s, e) => FillVizualizator();
@@ -620,11 +580,10 @@ namespace XMLParsing
 
             Transform = new Button()
             {
-                Text = "Transform to HTML",
-                Location = new Point(ContentContainer.Bounds.X +
-                    (ContentContainer.Width - 160) / 2, ContentContainer.Bounds.Bottom + 5),
+                Text = "Convert to HTML",
+                Location = new Point((ContentContainer.Width - 200) / 2 + 30, 20),
                 Font = new Font("Verdana", 10),
-                Size = new Size(160, 30),
+                Size = new Size(200, 30),
             };
 
             Transform.Click += (s, e) => TransformToHTML();
@@ -635,9 +594,75 @@ namespace XMLParsing
             Controls.Add(Transform);
         }
 
+        private void InitializeLabels()
+        {
+            L1 = new Label()
+            {
+                Text = "Author:",
+                Location = new Point(ContentContainer.Width + 50, AuthorFilter.Top + 2),
+                Width = 140,
+                Font = new Font("Verdana", 12),
+            };
+            L2 = new Label()
+            {
+                Text = "Title:",
+                Location = new Point(ContentContainer.Width + 50, TitleFilter.Top + 2),
+                Width = 140,
+                Font = new Font("Verdana", 12),
+            };
+            L3 = new Label()
+            {
+                Text = "Description:",
+                Location = new Point(ContentContainer.Width + 50, DescriptionFilter.Top + 2),
+                Width = 140,
+                Font = new Font("Verdana", 12),
+            };
+            L4 = new Label()
+            {
+                Text = "Genre:",
+                Location = new Point(ContentContainer.Width + 50, GenreFilter.Top + 2),
+                Width = 140,
+                Font = new Font("Verdana", 12),
+            };
+            L5 = new Label()
+            {
+                Text = "Published:",
+                Location = new Point(ContentContainer.Width + 50, YearFromFilter.Top + 2),
+                Width = 140,
+                Font = new Font("Verdana", 12),
+            };
+            L6 = new Label()
+            {
+                Text = "Price:",
+                Location = new Point(ContentContainer.Width + 50, PriceFromFilter.Top + 2),
+                Width = 140,
+                Font = new Font("Verdana", 12),
+            };
+            L7 = new Label()
+            {
+                Text = "-",
+                Location = new Point(YearFromFilter.Right + 5, YearFromFilter.Top),
+                Font = new Font("Verdana", 12),
+            };
+            L8 = new Label()
+            {
+                Text = "-",
+                Location = new Point(PriceFromFilter.Right + 5, PriceFromFilter.Top),
+                Font = new Font("Verdana", 12),
+            };
+
+            Controls.Add(L1);
+            Controls.Add(L2);
+            Controls.Add(L3);
+            Controls.Add(L4);
+            Controls.Add(L5);
+            Controls.Add(L6);
+            Controls.Add(L7);
+            Controls.Add(L8);
+        }
         
         // event handlers
-        void RadioButton_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton selectedTool = sender as RadioButton;
             if (selectedTool.Name == "LINQ") Parser = new LINQParser(XMLSourceFile);
@@ -645,37 +670,7 @@ namespace XMLParsing
             //else if (selectedTool.Name == "SAX") Parser = new SAXParser(XMLSourceFile);
         }
 
-        void Filter_Enter(object sender, EventArgs e)
-        {
-            if (sender is TextBox)
-            {
-                TextBox filter = sender as TextBox;
-                if (DefaultValues[filter.Name] == filter.Text) filter.Text = "";
-            }
-            else if (sender is ComboBox) 
-            {
-                ComboBox filter = sender as ComboBox;
-                if (DefaultValues[filter.Name] == filter.Text) filter.Text = "";
-            }
-        }
-
-        void Filter_Leave(object sender, EventArgs e)
-        {
-            if (sender is TextBox)
-            {
-                TextBox filter = sender as TextBox;
-                if (string.IsNullOrWhiteSpace(filter.Text)) 
-                    filter.Text = DefaultValues[filter.Name];
-            }
-            else if (sender is ComboBox)
-            {
-                ComboBox filter = sender as ComboBox;
-                if (string.IsNullOrWhiteSpace(filter.Text))
-                    filter.Text = DefaultValues[filter.Name];
-            }
-        }
-
-        void Filter_TextChanged(object sender, EventArgs e)
+        private void FilterChanged(object sender, EventArgs e)
         {
             string newValue, propName;
             if (sender is TextBox)
@@ -683,7 +678,6 @@ namespace XMLParsing
                 TextBox f = sender as TextBox;
                 newValue = f.Text;
                 propName = f.Name;
-                if (newValue == DefaultValues[propName]) return;
                 CurrentFilter.SetFilter(propName, newValue);
             }
             else
@@ -691,59 +685,70 @@ namespace XMLParsing
                 ComboBox f = sender as ComboBox;
                 newValue = f.Text;
                 propName = f.Name;
-                if (newValue == DefaultValues[propName]) return;
                 CurrentFilter.SetFilter(propName, newValue);
             }
         }
 
-        void XMLDataVisualizator_SizeChanged(object sender, EventArgs e)
+        private void XMLDataVisualizator_SizeChanged(object sender, EventArgs e)
         {
-            ContentContainer.Size = new Size((Width - 120) / 2, ClientSize.Height - 70);
+            ContentContainer.Size = new Size((Width - 120) / 2, ClientSize.Height - 80);
 
-            TitleFilter.Location = new Point(90 + ContentContainer.Width, 30);
-            TitleFilter.Size = new Size(ContentContainer.Width - 30, 100);
+            AuthorFilter.Location = new Point(190 + ContentContainer.Width, 40);
+            AuthorFilter.Size = new Size(ContentContainer.Width - 130, 100);
 
-            ArtistFilter.Location = new Point(90 + ContentContainer.Width,
-                TitleFilter.Bounds.Bottom + 30);
-            ArtistFilter.Size = new Size(ContentContainer.Width - 30, 100);
+            TitleFilter.Location = new Point(190 + ContentContainer.Width,
+                AuthorFilter.Bounds.Bottom + 20);
+            TitleFilter.Size = new Size(ContentContainer.Width - 130, 100);
 
-            CountryFilter.Location = new Point(90 + ContentContainer.Width,
-                ArtistFilter.Bounds.Bottom + 30);
-            CountryFilter.Size = new Size(ContentContainer.Width - 30, 100);
+            DescriptionFilter.Location = new Point(190 + ContentContainer.Width,
+                TitleFilter.Bounds.Bottom + 20);
+             DescriptionFilter.Size = new Size(ContentContainer.Width - 130, 100);
 
-            CompanyFilter.Location = new Point(90 + ContentContainer.Width,
-                CountryFilter.Bounds.Bottom + 30);
-            CompanyFilter.Size = new Size(ContentContainer.Width - 30, 100);
+            GenreFilter.Location = new Point(190 + ContentContainer.Width,
+                DescriptionFilter.Bounds.Bottom + 20);
+                GenreFilter.Size = new Size(ContentContainer.Width - 130, 100);
 
-            PriceFilterFrom.Location = new Point(90 + ContentContainer.Width,
-                CompanyFilter.Bounds.Bottom + 30);
-            PriceFilterFrom.Size = new Size((ContentContainer.Width - 70) / 2, 100);
+            YearFromFilter.Location = new Point(190 + ContentContainer.Width,
+                GenreFilter.Bounds.Bottom + 20);
+            YearFromFilter.Size = new Size((AuthorFilter.Width - 30) / 2, 100);
 
-            PriceFilterTo.Location = new Point((190 + 3 * ContentContainer.Width) / 2,
-                CompanyFilter.Bounds.Bottom + 30);
-            PriceFilterTo.Size = new Size((ContentContainer.Width - 70) / 2, 100);
+            YearToFilter.Location =
+                new Point(YearFromFilter.Right + 30,
+                GenreFilter.Bounds.Bottom + 20);
+            YearToFilter.Size = new Size((AuthorFilter.Width - 30) / 2, 100);
 
-            YearFilterFrom.Location = new Point(90 + ContentContainer.Width,
-                PriceFilterTo.Bounds.Bottom + 20);
-            YearFilterFrom.Size = new Size((ContentContainer.Width - 70) / 2, 100);
+            PriceFromFilter.Location =
+                new Point(190 + ContentContainer.Width,
+                YearFromFilter.Bounds.Bottom + 20);
+            PriceFromFilter.Size = new Size((AuthorFilter.Width - 30) / 2, 100);
 
-            YearFilterTo.Location = new Point((190 + 3 * ContentContainer.Width) / 2,
-                PriceFilterTo.Bounds.Bottom + 20);
-            YearFilterTo.Size = new Size((ContentContainer.Width - 70) / 2, 100);
+            PriceToFilter.Location = new Point(YearFromFilter.Right + 30,
+                YearFromFilter.Bounds.Bottom + 20);
+            PriceToFilter.Size = new Size((AuthorFilter.Width - 30) / 2, 100);
 
-            LINQ.Location = new Point(YearFilterFrom.Bounds.X, YearFilterFrom.Bounds.Bottom + 21);
-            DOM.Location = new Point(LINQ.Bounds.Right, LINQ.Bounds.Y);
-            SAX.Location = new Point(DOM.Bounds.Right, DOM.Bounds.Y);
+            L1.Location = new Point(ContentContainer.Width + 50, AuthorFilter.Top + 2);
+            L2.Location = new Point(ContentContainer.Width + 50, TitleFilter.Top + 2);
+            L3.Location = new Point(ContentContainer.Width + 50, DescriptionFilter.Top + 2);
+            L4.Location = new Point(ContentContainer.Width + 50, GenreFilter.Top + 2);
+            L5.Location = new Point(ContentContainer.Width + 50, YearFromFilter.Top + 2);
+            L6.Location = new Point(ContentContainer.Width + 50, PriceFromFilter.Top + 2);
+            L7.Location = new Point(YearFromFilter.Right + 5, YearFromFilter.Top);
+            L8.Location = new Point(PriceFromFilter.Right + 5, PriceFromFilter.Top);
 
-            Search.Location = new Point(TitleFilter.Bounds.X, LINQ.Bounds.Bottom + 21);
-            Reload.Location = new Point(Search.Bounds.Right + 10, Search.Bounds.Y);
-            Reset.Location = new Point(Reload.Bounds.Right + 10, Reload.Bounds.Y);
+            Search.Location = new Point(AuthorFilter.Right - 320 - 
+                (AuthorFilter.Right - L1.Left - 320) / 2, 
+                PriceFromFilter.Bottom + 30);
+            Reset.Location = new Point(Search.Bounds.Right + 30, Search.Bounds.Y);
+            Reload.Location = new Point(Reset.Bounds.Right + 30, Reset.Bounds.Y);
 
-            Transform.Location = new Point(ContentContainer.Bounds.X +
-                    (ContentContainer.Width - 160) / 2, ContentContainer.Bounds.Bottom + 5);
+            SAX.Location = new Point(Search.Left + 10, Search.Bottom + 15);
+            DOM.Location = new Point(SAX.Right, SAX.Top);
+            LINQ.Location = new Point(DOM.Right, SAX.Top);
+
+            Transform.Location = new Point((ContentContainer.Width - 200) / 2 + 30, 20);
         }
 
-        void XMLDataVisualizator_Closing(object sender, FormClosingEventArgs e)
+        private void XMLDataVisualizator_Closing(object sender, FormClosingEventArgs e)
         {
             var result = MessageBox.Show("Are you sure you want to leave?", "Exit confirmation",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -753,46 +758,46 @@ namespace XMLParsing
 
 
         // logic implementation
-        void FillVizualizator() // fills data depending on current filters
+        private void FillVizualizator() // fills data depending on current filters
         {
             var res = Parser.FilterBy(CurrentFilter);
             ContentContainer.Text = 
                 String.IsNullOrWhiteSpace(res.CDData)
-                ? "No appropriate disks found."
+                ? "Books not found :("
                 : res.CDData;
 
+            AuthorFilter.Items.Clear();
             TitleFilter.Items.Clear();
-            ArtistFilter.Items.Clear();
-            CountryFilter.Items.Clear();
-            CompanyFilter.Items.Clear();
+            DescriptionFilter.Items.Clear();
+            GenreFilter.Items.Clear();
             
-            TitleFilter.Items.AddRange(res.Titles.ToArray());
-            ArtistFilter.Items.AddRange(res.Artists.ToArray());
-            CountryFilter.Items.AddRange(res.Countries.ToArray());
-            CompanyFilter.Items.AddRange(res.Companies.ToArray());
+            AuthorFilter.Items.AddRange(res.Titles.ToArray());
+            TitleFilter.Items.AddRange(res.Artists.ToArray());
+            DescriptionFilter.Items.AddRange(res.Countries.ToArray());
+            GenreFilter.Items.AddRange(res.Companies.ToArray());
         }
 
-        void ResetFilters()
+        private void ResetFilters()
         {
             CurrentFilter = new CDFilter();
-            TitleFilter.Text = DefaultValues["Title"];
-            ArtistFilter.Text = DefaultValues["Artist"];
-            CompanyFilter.Text = DefaultValues["Company"];
-            CountryFilter.Text = DefaultValues["Country"];
-            PriceFilterFrom.Text = DefaultValues["PriceFrom"];
-            PriceFilterTo.Text = DefaultValues["PriceTo"];
-            YearFilterFrom.Text = DefaultValues["YearFrom"];
-            YearFilterTo.Text = DefaultValues["YearTo"];
+            AuthorFilter.Text = "";
+            TitleFilter.Text = "";
+            GenreFilter.Text = "";
+            DescriptionFilter.Text = ""; 
+            PriceFromFilter.Text = "";
+            PriceToFilter.Text = "";
+            YearFromFilter.Text = "";
+            YearToFilter.Text = "";
             FillVizualizator();
         }
 
-        void ReloadFile()
+        private void ReloadFile()
         {
             Parser.Load(XMLSourceFile);
             FillVizualizator();
         }
 
-        void TransformToHTML()
+        private void TransformToHTML()
         {
             XslCompiledTransform transform = new XslCompiledTransform();
             transform.Load(XSLTSourceFile);
