@@ -285,14 +285,15 @@ namespace XMLParsing
     public class SAXParser : XMLParser
     {
         XmlReader xmlReader;
-
+        string File;
         public SAXParser(string file)
         {
-            Load(file);
+            File = file;
         }       
 
         public ResultData FilterBy(BookFilter filter)
         {
+            Load(File);
             BookInfo book = null;
             int i = 0;
             var dataToDisplay = "";
@@ -302,6 +303,7 @@ namespace XMLParsing
 
             while (xmlReader.Read())
             {
+                Debug.WriteLine(xmlReader.Value);
                 switch (xmlReader.NodeType)
                 {
                     case XmlNodeType.Element:
@@ -311,22 +313,31 @@ namespace XMLParsing
                                 book = new BookInfo();
                                 break;
                             case "title":
+                                xmlReader.Read();
                                 book.Title = xmlReader.Value;
                                 titles.Add(xmlReader.Value);
                                 break;
                             case "author":
+                                xmlReader.Read();
                                 book.Author = xmlReader.Value;
                                 authors.Add(xmlReader.Value);
                                 break;
                             case "genre":
+                                xmlReader.Read();
                                 book.Genre = xmlReader.Value;
                                 genres.Add(xmlReader.Value);
                                 break;
                             case "price":
+                                xmlReader.Read();
                                 book.Price = xmlReader.Value;
                                 break;
                             case "publishYear":
+                                xmlReader.Read();
                                 book.Year = xmlReader.Value;
+                                break;
+                            case "description":
+                                xmlReader.Read();
+                                book.Description = xmlReader.Value;
                                 break;
                             default:
                                 break;
@@ -335,6 +346,7 @@ namespace XMLParsing
                     case XmlNodeType.EndElement:
                         if (xmlReader.Name == "book")
                         {
+                            Debug.WriteLine(book.Price);
                             if (filter.IsMatch(book))
                             {
                                 i++;
@@ -359,6 +371,7 @@ namespace XMLParsing
         public void Load(string file)
         {
             xmlReader = XmlReader.Create(file);
+            Debug.WriteLine(xmlReader.Value);
         }
     }
 
@@ -655,7 +668,7 @@ namespace XMLParsing
             RadioButton selectedTool = sender as RadioButton;
             if (selectedTool.Name == "LINQ") Parser = new LINQParser(XMLSourceFile);
             else if (selectedTool.Name == "DOM") Parser = new DOMParser(XMLSourceFile);
-            //else if (selectedTool.Name == "SAX") Parser = new SAXParser(XMLSourceFile);
+            else if (selectedTool.Name == "SAX") Parser = new SAXParser(XMLSourceFile);
         }
 
         private void FilterChanged(object sender, EventArgs e)

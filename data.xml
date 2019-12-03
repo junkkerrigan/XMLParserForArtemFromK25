@@ -1,203 +1,109 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0"?>
 <catalog>
-	<cd>
-		<title>Спрячь свое сердце</title>
-		<artist>Бонни Тайлер</artist>
-		<country>Соединенное Королевство</country>
-		<company>Записи си-би-эс</company>
-		<price>9.90</price>
-		<year>1988</year>
-	</cd>
-	<cd>
-		<title>Лучшие Хиты</title>
-		<artist>Долли Партон</artist>
-		<country>США</country>
-		<company>Ар-Си-Эй</company>
-		<price>9.90</price>
-		<year>1982</year>
-	</cd>
-	<cd>
-		<title>Still got the blues</title>
-		<artist>Гарри Мур</artist>
-		<country>Соединенное Королевство</country>
-		<company>Virgin records</company>
-		<price>10.20</price>
-		<year>1990</year>
-	</cd>
-	<cd>
-		<title>Эрос</title>
-		<artist>Эрос Рамазотти</artist>
-		<country>ЕС</country>
-		<company>BMG</company>
-		<price>9.90</price>
-		<year>1997</year>
-	</cd>
-	<cd>
-		<title>Только одну ночь</title>
-		<artist>Бии Гиис</artist>
-		<country>Соединенное Королевство</country>
-		<company>Полидор</company>
-		<price>10.90</price>
-		<year>1998</year>
-	</cd>
-	<cd>
-		<title>Мама Сильвии</title>
-		<artist>Доктор Хук</artist>
-		<country>Соединенное Королевство</country>
-		<company>Си-би-эс</company>
-		<price>8.10</price>
-		<year>1973</year>
-	</cd>
-	<cd>
-		<title>Мэгги Мэй</title>
-		<artist>Род Стюарт</artist>
-		<country>Соединенное Королевство</country>
-		<company>Пиквик</company>
-		<price>8.50</price>
-		<year>1990</year>
-	</cd>
-	<cd>
-		<title>Романза</title>
-		<artist>Андреа Бочелли</artist>
-		<country>ЕС</country>
-		<company>Полидор</company>
-		<price>10.80</price>
-		<year>1996</year>
-	</cd>
-	<cd>
-		<title>Когда мужчина любит женщину</title>
-		<artist>Пирси Слидж</artist>
-		<country>США</country>
-		<company>Атлантика</company>
-		<price>8.70</price>
-		<year>1987</year>
-	</cd>
-	<cd>
-		<title>Черный Ангел</title>
-		<artist>Дикая Роза</artist>
-		<country>ЕС</country>
-		<company>Мега</company>
-		<price>10.90</price>
-		<year>1995</year>
-	</cd>
-	<cd>
-		<title>1999 Номинанты Грэмми</title>
-		<artist>(несколько)</artist>
-		<country>США</country>
-		<company>Грэмми</company>
-		<price>10.20</price>
-		<year>1999</year>
-	</cd>
-	<cd>
-		<title>Для хороших времен</title>
-		<artist>Кенни Роджерс</artist>
-		<country>Соединенное Королевство</country>
-		<company>Mucik Мастер</company>
-		<price>8.70</price>
-		<year>1995</year>
-	</cd>
-	<cd>
-		<title>Стиль Большого Человека</title>
-		<artist>Уилл Смит</artist>
-		<country>США</country>
-		<company>Колумбия</company>
-		<price>9.90</price>
-		<year>1997</year>
-	</cd>
-	<cd>
-		<title>Ниссовый Мед</title>
-		<artist>Ван Моррисон</artist>
-		<country>Соединенное Королевство</country>
-		<company>Полидор</company>
-		<price>8.20</price>
-		<year>1971</year>
-	</cd>
-	<cd>
-		<title>Соулсвилл</title>
-		<artist>Джорн Хоэл</artist>
-		<country>Норвегия</country>
-		<company>WEA</company>
-		<price>7.90</price>
-		<year>1996</year>
-	</cd>
-	<cd>
-		<title>Лучшее из</title>
-		<artist>Кэт Стивенс</artist>
-		<country>Соединенное Королевство</country>
-		<company>Исландия</company>
-		<price>8.90</price>
-		<year>1990</year>
-	</cd>
-	<cd>
-		<title>Стоп</title>
-		<artist>Сэм Браун</artist>
-		<country>Соединенное Королевство</country>
-		<company>А и М</company>
-		<price>8.90</price>
-		<year>1988</year>
-	</cd>
-	<cd>
-		<title>Мост Шпионов</title>
-		<artist>T'Pau</artist>
-		<country>Соединенное Королевство</country>
-		<company>Сирена</company>
-		<price>7.90</price>
-		<year>1987</year>
-	</cd>
-	<cd>
-		<title>Приватный Танцор</title>
-		<artist>Тина Тернер</artist>
-		<country>Соединенное Королевство</country>
-		<company>Капитолий</company>
-		<price>8.90</price>
-		<year>1983</year>
-	</cd>
-	<cd>
-		<title>Midt om natten</title>
-		<artist>Ким Ларсен</artist>
-		<country>ЕС</country>
-		<company>Смесь</company>
-		<price>7.80</price>
-		<year>1983</year>
-	</cd>
-	<cd>
-		<title>Паваротти Гала Концерт</title>
-		<artist>Лучиано Паваротти</artist>
-		<country>Соединенное Королевство</country>
-		<company>ДЕККА</company>
-		<price>9.90</price>
-		<year>1991</year>
-	</cd>
-	<cd>
-		<title>Док в заливе</title>
-		<artist>Отис Реддинг</artist>
-		<country>США</country>
-		<company>Атлантика</company>
-		<price>7.90</price>
-		<year>1987</year>
-	</cd>
-	<cd>
-		<title>Книга с картинками</title>
-		<artist>Симпли Рэд</artist>
-		<country>ЕС</country>
-		<company>Электра</company>
-		<price>7.20</price>
-		<year>1985</year>
-	</cd>
-	<cd>
-		<title>Красный</title>
-		<artist>Коммунары</artist>
-		<country>Соединенное Королевство</country>
-		<company>Лондон</company>
-		<price>7.80</price>
-		<year>1987</year>
-	</cd>
-	<cd>
-		<title>Освободи мое сердце</title>
-		<artist>Джо Коккер</artist>
-		<country>США</country>
-		<company>EMI</company>
-		<price>8.20</price>
-		<year>1987</year>
-	</cd>
+   <book id="bk101">
+      <author>Gambardella, Matthew</author>
+      <title>XML Developer's Guide</title>
+      <genre>Computer</genre>
+      <price>44.95</price>
+      <publishYear>2000</publishYear>
+      <description>An in-depth look at creating applications with XML.</description>
+   </book>
+   <book id="bk102">
+      <author>Ralls, Kim</author>
+      <title>Midnight Rain</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publishYear>2000</publishYear>
+      <description>A former architect battles corporate zombies, an evil sorceress, and her own childhood to become queen of the world.</description>
+   </book>
+   <book id="bk103">
+      <author>Corets, Eva</author>
+      <title>Maeve Ascendant</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publishYear>2000</publishYear>
+      <description>After the collapse of a nanotechnology society in England, the young survivors lay the foundation for a new society.</description>
+   </book>
+   <book id="bk104">
+      <author>Corets, Eva</author>
+      <title>Oberon's Legacy</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publishYear>2001</publishYear>
+      <description>In post-apocalypse England, the mysterious agent known only as Oberon helps to create a new life 
+      for the inhabitants of London. Sequel to Maeve Ascendant.</description>
+   </book>
+   <book id="bk105">
+      <author>Corets, Eva</author>
+      <title>The Sundered Grail</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publishYear>2001</publishYear>
+      <description>The two daughters of Maeve, half-sisters, battle one another for control of England. Sequel to Oberon's Legacy.</description>
+   </book>
+   <book id="bk106">
+      <author>Randall, Cynthia</author>
+      <title>Lover Birds</title>
+      <genre>Romance</genre>
+      <price>4.95</price>
+      <publishYear>2000</publishYear>
+      <description>When Carla meets Paul at an ornithology conference, tempers fly as feathers get ruffled.</description>
+   </book>
+   <book id="bk107">
+      <author>Thurman, Paula</author>
+      <title>Splish Splash</title>
+      <genre>Romance</genre>
+      <price>4.95</price>
+      <publishYear>2000</publishYear>
+      <description>A deep sea diver finds true love twenty thousand leagues beneath the sea.</description>
+   </book>
+   <book id="bk108">
+      <author>Knorr, Stefan</author>
+      <title>Creepy Crawlies</title>
+      <genre>Horror</genre>
+      <price>4.95</price>
+      <publishYear>2000</publishYear>
+      <description>An anthology of horror stories about roaches, centipedes, scorpions  and other insects.</description>
+   </book>
+   <book id="bk109">
+      <author>Kress, Peter</author>
+      <title>Paradox Lost</title>
+      <genre>Science Fiction</genre>
+      <price>6.95</price>
+      <publishYear>2000</publishYear>
+      <description>After an inadvertant trip through a Heisenberg Uncertainty Device, James Salway discovers the problems 
+      of being quantum.</description>
+   </book>
+   <book id="bk110">
+      <author>O'Brien, Tim</author>
+      <title>Microsoft .NET: The Programming Bible</title>
+      <genre>Computer</genre>
+      <price>36.95</price>
+      <publishYear>2000</publishYear>
+      <description>Microsoft's .NET initiative is explored in detail in this deep programmer's reference.</description>
+   </book>
+   <book id="bk111">
+      <author>O'Brien, Tim</author>
+      <title>MSXML3: A Comprehensive Guide</title>
+      <genre>Computer</genre>
+      <price>36.95</price>
+      <publishYear>2000</publishYear>
+      <description>The Microsoft MSXML3 parser is covered in detail, with attention to XML DOM interfaces, XSLT processing, SAX and more.</description>
+   </book>
+   <book id="bk112">
+      <author>Galos, Mike</author>
+      <title>Visual Studio 7: A Comprehensive Guide</title>
+      <genre>Computer</genre>
+      <price>49.95</price>
+      <publishYear>2001</publishYear>
+      <description>Microsoft Visual Studio 7 is explored in depth, looking at how Visual Basic, Visual C++, C#, and ASP+ are integrated into a comprehensive development environment.</description>
+   </book>
+	<book id="bk113">
+		<author>Rowling, J.K.</author>
+		<title>Harry Potter</title>
+		<genre>Fantasy</genre>
+		<price>125.5</price>
+		<publishYear>2002</publishYear>
+		<description>Greatest book.</description>
+	</book>
 </catalog>
