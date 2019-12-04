@@ -315,17 +315,14 @@ namespace XMLParsing
                             case "title":
                                 xmlReader.Read();
                                 book.Title = xmlReader.Value;
-                                titles.Add(xmlReader.Value);
                                 break;
                             case "author":
                                 xmlReader.Read();
                                 book.Author = xmlReader.Value;
-                                authors.Add(xmlReader.Value);
                                 break;
                             case "genre":
                                 xmlReader.Read();
                                 book.Genre = xmlReader.Value;
-                                genres.Add(xmlReader.Value);
                                 break;
                             case "price":
                                 xmlReader.Read();
@@ -349,6 +346,9 @@ namespace XMLParsing
                             Debug.WriteLine(book.Price);
                             if (filter.IsMatch(book))
                             {
+                                titles.Add(book.Title);
+                                authors.Add(book.Author);
+                                genres.Add(book.Genre);
                                 i++;
                                 dataToDisplay += book.InfoToDisplay(i) + '\n';
                             }
